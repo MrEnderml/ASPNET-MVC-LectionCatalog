@@ -1,4 +1,4 @@
-namespace LectionCatalog.Models
+﻿namespace LectionCatalog.Models
 {
     public class ErrorViewModel
     {
