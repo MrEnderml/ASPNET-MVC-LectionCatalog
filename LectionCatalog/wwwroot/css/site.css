@@ -16,3 +16,24 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.text-lection {
+    position: relative;
+    min-height: 147px;
+    z-index: 2;
+    color: white;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1.14;
+}
+
+.part-text-lection {
+    position: absolute;
+    bottom: 0%;
+    left: 0;
+    padding-left: 10px;
+}
+
+.tshadow {
+    background: rgba(0,0,0,.2);
+}

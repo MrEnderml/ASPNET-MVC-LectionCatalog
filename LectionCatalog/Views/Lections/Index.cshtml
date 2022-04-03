@@ -1,0 +1,44 @@
+﻿@*Define mddel*@
+@model IEnumerable<Lection>
+
+@{
+	ViewData["Title"] = "List of Movies";
+}
+
+@*Define ViewData*@
+
+<div class="row">
+	@foreach (var item in Model)
+	{
+		<div class="col-md-3 col-xs-6 border-primary mb-3">
+			<div class="card mb-3" style="max-width: 325px;">
+				<div class="row g-0">
+					<a>
+						<span style="opacity: 1;">
+							<img style="position: absolute; top: 0; letf: 0; width: 100%" src="https://cdn.culture.ru/c/287542.324x200.webp" />
+						</span>
+					</a>
+					<div class="col-md-12" style="z-index: 2">
+						<span class="float-end text-white" style="font-size: 24px"><i class="bi bi-heart"></i></span>
+						<span class="float-end text-white" style="font-size: 24px"><i class="bi bi-stopwatch"></i></span>
+					</div>
+					<div class="text-lection shadow col-md-12">
+						<div class="part-text-lection">
+							<div class="" style="font-size: 16px">
+								<span class="tshadow">@item.Name</span>
+							</div>
+							<div>
+								<span class="tshadow">Дмитрий Петров|</span>
+								<span class="tshadow">@item.Year.ToString("yyyy")|</span>
+								<span class="tshadow">44 мин</span>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+
+</div>
+

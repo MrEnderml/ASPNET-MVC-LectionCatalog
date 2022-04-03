@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Services\" />
     <Folder Include="Data\Static\" />
   </ItemGroup>
 

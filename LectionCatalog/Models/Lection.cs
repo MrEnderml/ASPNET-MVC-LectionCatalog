@@ -14,6 +14,7 @@ namespace LectionCatalog.Models
         public DateTime Year { get; set; }
         public string ImageURL { get; set; } 
         //public string LinkURL { get; set; }
+        //public int Duration { get; set; }
         public CountriesCategory Country { get; set; }
         public int Views { get; set; }
         public LectionCategory LectionCategory { get; set; }

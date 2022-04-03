@@ -1,4 +1,5 @@
 ﻿using LectionCatalog.Data;
+using LectionCatalog.Data.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace LectionCatalog
@@ -13,7 +14,7 @@ namespace LectionCatalog
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionStirng")));
-
+            services.AddScoped<ILectionsService, LectionsService>();
             services.AddControllersWithViews();
         }
 
