@@ -1,4 +1,7 @@
-﻿namespace LectionCatalog
+﻿using LectionCatalog.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace LectionCatalog
 {
     public class StartUp
     {
@@ -9,6 +12,8 @@
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionStirng")));
+
             services.AddControllersWithViews();
         }
 
@@ -34,6 +39,8 @@
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            AppDbInitializer.Seed(app);
         }
     }
 }

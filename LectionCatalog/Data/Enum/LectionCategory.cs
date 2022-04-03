@@ -6,8 +6,10 @@
         History,
         Languages,
         Physics,
-        Orogramming,
+        Programming,
         Technology,
-        Technique
+        Technique,
+        Philosophy,
+        Science
     }
 }
