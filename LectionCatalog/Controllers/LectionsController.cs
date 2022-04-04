@@ -16,5 +16,11 @@ namespace LectionCatalog.Controllers
             var allLections = await _service.GetAllAsync();
             return View(allLections);
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var lectionDetails = await _service.GetLectionByIdAsync(id);
+            return View(lectionDetails);
+        }
     }
 }

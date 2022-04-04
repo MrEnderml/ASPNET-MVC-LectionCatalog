@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LectionCatalog.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections;
 
 namespace LectionCatalog.Data.Services
@@ -10,9 +11,19 @@ namespace LectionCatalog.Data.Services
         {
             _context = context;
         }
+
         public async Task<IEnumerable> GetAllAsync()
         {
             return await _context.Lections.ToListAsync();
+        }
+
+        public async Task<Lection> GetLectionByIdAsync(int id)
+        {
+           var lectionDetails = await _context.Lections.
+                Include(ll => ll.Lectors_Lections).
+                ThenInclude(l => l.Lector).
+                FirstOrDefaultAsync(n => id == n.Id);
+            return lectionDetails;
         }
     }
 }

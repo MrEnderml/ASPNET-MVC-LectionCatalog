@@ -1,0 +1,38 @@
+﻿@model Lection
+
+@{
+	ViewData["Title"] = "List of Lections";
+}
+
+@*Define ViewData*@
+
+<div class="row">
+	<div class="col-md-8 offset-2 col-xs-6 border-primary mb-3">
+		<div>
+			<img style="width: 100%; height: 300px" />
+		</div>
+		<div class="py-2">
+			<h3 class="card-title">@Model.Name</h3>
+			<span class="card-text">@Model.Views Views *</span>
+			<span class="card-text">@Model.Year.ToString("yyyy") year</span>
+			<p class="card-text">@Model.Description</p>
+			<p class="card-text">
+				@if (Model.Lectors_Lections.Count > 1)
+				{
+					<b>Lectors: </b>
+				}
+				else
+				{
+					<b>Lector: </b>
+				}
+				@foreach (var lector in Model.Lectors_Lections)
+				{
+					<span>@lector.Lector.FullName </span>
+				}
+			</p>
+			<p class="card-text">
+				<span class="bg-black text-white rounded px-1">@Model.LectionCategory</span>
+			</p>
+		</div>
+	</div>
+</div>>
