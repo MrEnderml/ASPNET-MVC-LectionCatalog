@@ -7,5 +7,6 @@ namespace LectionCatalog.Data.Services
     {
         Task<IEnumerable> GetAllAsync();
         Task<Lection> GetLectionByIdAsync(int id);
+        Task<LectionDropdownsVM> GetLectionDropdownsValues();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using LectionCatalog.Data.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LectionCatalog.Controllers
 {
@@ -14,6 +15,10 @@ namespace LectionCatalog.Controllers
         public async Task<IActionResult> Index()
         {
             var allLections = await _service.GetAllAsync();
+
+            var lectionsDropdownData = await _service.GetLectionDropdownsValues();
+            ViewBag.Lectors = lectionsDropdownData.Lectors;
+            ViewBag.LectionsCategory = lectionsDropdownData.LectionsCategory;
             return View(allLections);
         }
 

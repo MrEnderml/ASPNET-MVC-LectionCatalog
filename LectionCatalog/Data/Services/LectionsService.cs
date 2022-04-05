@@ -1,4 +1,5 @@
-﻿using LectionCatalog.Models;
+﻿using LectionCatalog.Data.Enum;
+using LectionCatalog.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 
@@ -24,6 +25,16 @@ namespace LectionCatalog.Data.Services
                 ThenInclude(l => l.Lector).
                 FirstOrDefaultAsync(n => id == n.Id);
             return lectionDetails;
+        }
+
+        public async Task<LectionDropdownsVM> GetLectionDropdownsValues()
+        {
+            var response = new LectionDropdownsVM()
+            {
+                Lectors = await _context.Lectors.OrderBy(n => n.FullName).ToListAsync(),
+                LectionsCategory = LectionCategory.GetValues(typeof(LectionCategory)).Cast<LectionCategory>().ToList()
+            };
+            return response;
         }
     }
 }
