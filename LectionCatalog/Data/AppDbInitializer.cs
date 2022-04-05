@@ -58,10 +58,12 @@ namespace LectionCatalog.Data
                         {
                             Name = "Based Story",
                             Description = "This is a story about based story",
-                            Year = DateTime.Now.AddYears(-12),
-                            ImageURL = "",
+                            Year = 2003,
+                            ImageURL = "https://i.ytimg.com/vi/pJUttqlDEHw/maxresdefault.jpg",
                             isFavorite = false,
                             isWatchLater = false,
+                            Duration = 21,
+                            LinkURL = "https://www.youtube.com/embed/pJUttqlDEHw",
                             Country = CountriesCategory.USA,
                             Views = 25000,
                             LectionCategory = LectionCategory.Physics,
@@ -72,8 +74,10 @@ namespace LectionCatalog.Data
                             Description = "What is the math and what should you do about it?",
                             isFavorite = false,
                             isWatchLater = false,
-                            Year = DateTime.Now.AddYears(-14),
+                            Year = 2017,
                             ImageURL = "",
+                            Duration = 33,
+                            LinkURL = "",
                             Country = CountriesCategory.USA,
                             Views = 225000,
                             LectionCategory = LectionCategory.Math,
@@ -84,8 +88,10 @@ namespace LectionCatalog.Data
                             Description = "This is a story about based story",
                             isFavorite = false,
                             isWatchLater = false,
-                            Year = DateTime.Now.AddYears(-3),
+                            Year = 2007,
                             ImageURL = "",
+                            Duration = 54,
+                            LinkURL = "",
                             Country = CountriesCategory.Russia,
                             Views = 53000,
                             LectionCategory = LectionCategory.History,
@@ -96,8 +102,10 @@ namespace LectionCatalog.Data
                             Description = "This is a story about physical based story",
                             isFavorite = false,
                             isWatchLater = false,
-                            Year = DateTime.Now.AddYears(-5),
+                            Year = 2014,
                             ImageURL = "",
+                            Duration = 43,
+                            LinkURL = "",
                             Country = CountriesCategory.China,
                             Views = 415000,
                             LectionCategory = LectionCategory.Physics,
@@ -108,8 +116,10 @@ namespace LectionCatalog.Data
                             Description = "To be or not to be",
                             isFavorite = false,
                             isWatchLater = false,
-                            Year = DateTime.Now.AddYears(-2),
+                            Year = 2007,
                             ImageURL = "",
+                            Duration = 55,
+                            LinkURL = "",
                             Country = CountriesCategory.Russia,
                             Views = 13000,
                             LectionCategory = LectionCategory.Philosophy,
@@ -125,12 +135,7 @@ namespace LectionCatalog.Data
                         {
                             LectorId= 1,
                             LectionId = 1
-                        },
-                        new Lector_Lection()
-                        {
-                            LectorId = 3,
-                            LectionId = 1
-                        },
+                        },  
 
                          new Lector_Lection()
                         {
@@ -145,19 +150,9 @@ namespace LectionCatalog.Data
 
                         new Lector_Lection()
                         {
-                            LectorId = 1,
+                            LectorId = 3,
                             LectionId = 3
-                        },
-                        new Lector_Lection()
-                        {
-                            LectorId = 2,
-                            LectionId = 3
-                        },
-                        new Lector_Lection()
-                        {
-                            LectorId = 5,
-                            LectionId = 3
-                        },
+                        },    
 
 
                         new Lector_Lection()
@@ -169,29 +164,8 @@ namespace LectionCatalog.Data
                         {
                             LectorId = 3,
                             LectionId = 4
-                        },
-                        new Lector_Lection()
-                        {
-                            LectorId = 4,
-                            LectionId = 4
-                        },
-
-
-                        new Lector_Lection()
-                        {
-                            LectorId = 2,
-                            LectionId = 5
-                        },
-                        new Lector_Lection()
-                        {
-                            LectorId = 3,
-                            LectionId = 5
-                        },
-                        new Lector_Lection()
-                        {
-                            LectorId = 4,
-                            LectionId = 5
-                        },
+                        },                      
+                       
                         new Lector_Lection()
                         {
                             LectorId = 5,

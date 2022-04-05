@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LectionCatalog.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220403174450_Initial")]
+    [Migration("20220405140500_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,12 +39,19 @@ namespace LectionCatalog.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("LectionCategory")
                         .HasColumnType("int");
+
+                    b.Property<string>("LinkURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -53,8 +60,8 @@ namespace LectionCatalog.Migrations
                     b.Property<int>("Views")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Year")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
 
                     b.Property<bool>("isFavorite")
                         .HasColumnType("bit");

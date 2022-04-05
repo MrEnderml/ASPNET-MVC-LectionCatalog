@@ -61,7 +61,7 @@
 
 				<div class="row g-0">
 					<span style="opacity: 1;">
-						<img class="rounded" style="position: absolute; top: 0; letf: 0; width: 100%" src="https://cdn.culture.ru/c/287542.324x200.webp" />
+						<img class="rounded" style="position: absolute; top: 0; letf: 0; width: 100%" src="@item.ImageURL" />
 					</span>
 					<div class="col-md-12" style="z-index: 2">
 						<a class="text-white" style="font-size: 24px" asp-action="Edit" asp-route-id="@item.Id">
@@ -81,8 +81,8 @@
 									{
 										<span class="tshadow">@lectors.Lector.FullName *</span>
 									}
-									<span class="tshadow">@item.Year.ToString("yyyy") * </span>
-									<span class="tshadow">44 мин</span>
+									<span class="tshadow">@item.Year * </span>
+									<span class="tshadow">@item.Duration</span>
 								</div>
 							</div>
 						</div>

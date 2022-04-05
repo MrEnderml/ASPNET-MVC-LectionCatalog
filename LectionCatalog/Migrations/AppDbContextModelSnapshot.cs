@@ -37,12 +37,19 @@ namespace LectionCatalog.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("LectionCategory")
                         .HasColumnType("int");
+
+                    b.Property<string>("LinkURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -51,8 +58,8 @@ namespace LectionCatalog.Migrations
                     b.Property<int>("Views")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Year")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
 
                     b.Property<bool>("isFavorite")
                         .HasColumnType("bit");

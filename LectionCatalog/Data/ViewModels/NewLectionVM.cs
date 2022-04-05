@@ -14,12 +14,16 @@ namespace LectionCatalog.Data.ViewModels
         [Display(Name = "Lection description")]
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
+
+        [Display(Name = "Favorite")]
         public bool isFavorite { get; set; }
+
+        [Display(Name = "Watch later")]
         public bool isWatchLater { get; set; }
 
         [Display(Name = "Lection year")]
         [Required(ErrorMessage = "Description is required")]
-        public DateTime Year { get; set; }
+        public int Year { get; set; }
 
         [Display(Name = "Lection preview URL")]
         [Required(ErrorMessage = "Lection preview URL is required")]
@@ -47,6 +51,6 @@ namespace LectionCatalog.Data.ViewModels
 
         [Display(Name = "Select lector(s)")]
         [Required(ErrorMessage = "Lection lector(s) is required")]
-        public List<int> Lectors { get; set; }
+        public List<int> LectorIds { get; set; }
     }
 }

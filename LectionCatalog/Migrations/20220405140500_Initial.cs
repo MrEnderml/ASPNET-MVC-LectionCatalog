@@ -58,8 +58,10 @@ namespace LectionCatalog.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     isFavorite = table.Column<bool>(type: "bit", nullable: false),
                     isWatchLater = table.Column<bool>(type: "bit", nullable: false),
-                    Year = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
                     ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LinkURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false),
                     Country = table.Column<int>(type: "int", nullable: false),
                     Views = table.Column<int>(type: "int", nullable: false),
                     LectionCategory = table.Column<int>(type: "int", nullable: false)
