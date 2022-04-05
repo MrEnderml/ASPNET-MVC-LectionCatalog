@@ -15,9 +15,9 @@
 					<a class="nav-link text-dark dropdown-toggle" id="lectorsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-weight: 700; font-size: 18px"><i class="bi bi-star-fill pe-2"></i>Lectors</a>
 
 					<div class="dropdown-menu" aria-labelledby="lectorsDropdown">
-						@foreach(var item in ViewBag.Lectors)
+						@foreach (var item in ViewBag.Lectors)
 						{
-							<a class="dropdown-item">@item.FullName</a>
+							<a class="dropdown-item fw-bold">@item.FullName</a>
 						}
 					</div>
 				</li>
@@ -28,9 +28,9 @@
 					<a class="nav-link text-dark dropdown-toggle" id="lectorssDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-weight: 700; font-size: 18px"><i class="bi bi-card-checklist pe-2"></i>Category</a>
 
 					<div class="dropdown-menu" aria-labelledby="lectorssDropdown">
-						@foreach(var item in ViewBag.LectionsCategory)
+						@foreach (var item in ViewBag.LectionsCategory)
 						{
-							<a class="dropdown-item">@item</a>
+							<a class="dropdown-item fw-bold">@item</a>
 						}
 					</div>
 				</li>
@@ -39,15 +39,15 @@
 			<form class="d-flex form-inline my-2 my-lg-0" asp-controller="Movies" asp-action="Index" style="padding-right: 25px">
 				<div class="dropdown">
 					<a class="text-dark dropdown-toggle" id="filterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-weight: 700; font-size: 18px text-underline: none"><i class="bi bi-filter"></i> Filter</a>
-					
+
 					<div class="dropdown-menu" aria-labelledby="filterDropdown">
-						<a class="dropdown-item"><i class="bi bi-arrow-up"></i> Views</a>
-						<a class="dropdown-item"><i class="bi bi-arrow-down"></i> Views</a>
-						<a class="dropdown-item"><i class="bi bi-arrow-up"></i> Year</a>
-						<a class="dropdown-item"><i class="bi bi-arrow-down"></i> Year</a>
+						<a class="dropdown-item fw-bold"><i class="bi bi-arrow-up"></i> Views</a>
+						<a class="dropdown-item fw-bold"><i class="bi bi-arrow-down"></i> Views</a>
+						<a class="dropdown-item fw-bold"><i class="bi bi-arrow-up"></i> Year</a>
+						<a class="dropdown-item fw-bold"><i class="bi bi-arrow-down"></i> Year</a>
 					</div>
 				</div>
-				
+
 			</form>
 		</div>
 	</div>
@@ -58,29 +58,37 @@
 	{
 		<div class="col-md-3 col-xs-6 border-primary mb-3">
 			<div class="card mb-3" style="max-width: 325px;">
-				<a asp-action="Details" asp-route-id="@item.Id">
-					<div class="row g-0">
-						<span style="opacity: 1;">
-							<img class="rounded" style="position: absolute; top: 0; letf: 0; width: 100%" src="https://cdn.culture.ru/c/287542.324x200.webp" />
-						</span>
-						<div class="col-md-12" style="z-index: 2">
-							<span class="float-end text-white" style="font-size: 24px"><i class="bi bi-heart"></i></span>
-							<span class="float-end text-white" style="font-size: 24px"><i class="bi bi-stopwatch"></i></span>
-						</div>
+
+				<div class="row g-0">
+					<span style="opacity: 1;">
+						<img class="rounded" style="position: absolute; top: 0; letf: 0; width: 100%" src="https://cdn.culture.ru/c/287542.324x200.webp" />
+					</span>
+					<div class="col-md-12" style="z-index: 2">
+						<a class="text-white" style="font-size: 24px" asp-action="Edit" asp-route-id="@item.Id">
+							<i class="bi bi-pencil-square"></i>
+						</a>
+						<span class="float-end text-white" style="font-size: 24px"><i class="bi bi-heart"></i></span>
+						<span class="float-end text-white" style="font-size: 24px"><i class="bi bi-stopwatch"></i></span>
+					</div>
+					<a class="" asp-action="Details" asp-route-id="@item.Id">
 						<div class="text-lection shadow col-md-12">
 							<div class="part-text-lection">
 								<div class="" style="font-size: 16px">
 									<span class="tshadow">@item.Name</span>
 								</div>
 								<div>
-									<span class="tshadow">Дмитрий Петров * </span>
+									@foreach (var lectors in item.Lectors_Lections)
+									{
+										<span class="tshadow">@lectors.Lector.FullName *</span>
+									}
 									<span class="tshadow">@item.Year.ToString("yyyy") * </span>
 									<span class="tshadow">44 мин</span>
 								</div>
 							</div>
 						</div>
-					</div>
-				</a>
+					</a>
+				</div>
+
 			</div>
 		</div>
 	}

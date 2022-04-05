@@ -15,7 +15,10 @@ namespace LectionCatalog.Data.Services
 
         public async Task<IEnumerable> GetAllAsync()
         {
-            return await _context.Lections.ToListAsync();
+            return await _context.Lections.
+                Include(ll => ll.Lectors_Lections).
+                ThenInclude(l => l.Lector).
+                ToListAsync();
         }
 
         public async Task<Lection> GetLectionByIdAsync(int id)
