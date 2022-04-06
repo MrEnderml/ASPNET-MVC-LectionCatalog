@@ -68,14 +68,39 @@ namespace LectionCatalog.Controllers
 
             if (!ModelState.IsValid)
             {
-                var movieDropdownData = await _service.GetLectionDropdownsValues();
+                var lectionDropdownData = await _service.GetLectionDropdownsValues();
 
-                ViewBag.LectorsSelectList = new SelectList(movieDropdownData.Lectors, "Id", "FullName");
+                ViewBag.LectorsSelectList = new SelectList(lectionDropdownData.Lectors, "Id", "FullName");
 
                 return View(lection);
             }
 
             await _service.UpdateLectionAsync(lection);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            var lectionDropdownData = await _service.GetLectionDropdownsValues();
+
+            ViewBag.LectorsSelectList = new SelectList(lectionDropdownData.Lectors, "Id", "FullName");
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(NewLectionVM lection)
+        {
+            if (!ModelState.IsValid)
+            {
+                var lectionDropdownData = await _service.GetLectionDropdownsValues();
+
+                ViewBag.LectorsSelectList = new SelectList(lectionDropdownData.Lectors, "Id", "FullName");
+
+                return View(lection);
+            }
+
+            await _service.AddNewLectionAsync(lection);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -82,7 +82,7 @@
 										<span class="tshadow">@lectors.Lector.FullName *</span>
 									}
 									<span class="tshadow">@item.Year * </span>
-									<span class="tshadow">@item.Duration</span>
+									<span class="tshadow">@item.Duration мин</span>
 								</div>
 							</div>
 						</div>
@@ -93,5 +93,9 @@
 		</div>
 	}
 
+</div>
+
+<div style="position: fixed; right: 25px; bottom: 25px" class="text-dark">
+	<a asp-controller="Lections" asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle"></i>Add New</a>
 </div>
 

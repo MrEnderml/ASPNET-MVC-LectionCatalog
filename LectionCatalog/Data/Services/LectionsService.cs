@@ -14,9 +14,35 @@ namespace LectionCatalog.Data.Services
             _context = context;
         }
 
-		public Task AddNewLectionAsync(NewLectionVM data)
+		public async Task AddNewLectionAsync(NewLectionVM data)
 		{
-			throw new NotImplementedException();
+            var newLeciton = new Lection()
+            {
+                Name = data.Name,
+                Description = data.Description,
+                Year = data.Year,
+                isFavorite = false,
+                isWatchLater = false,
+                Duration = data.Duration,
+                ImageURL = data.ImageURL,
+                LinkURL = data.LinkURL,
+                Country = data.Country,
+                LectionCategory = data.LectionCategory,
+            };
+
+            await _context.Lections.AddAsync(newLeciton);
+            await _context.SaveChangesAsync();
+
+            foreach(var lectorId in data.LectorIds)
+            {
+                var newLectorLection = new Lector_Lection()
+                {
+                    LectionId = newLeciton.Id,
+                    LectorId = lectorId
+                };
+                await _context.Lectors_Lections.AddAsync(newLectorLection);
+            }
+            await _context.SaveChangesAsync();
 		}
 
 		public Task DeleteLectionAsync(int id)
@@ -63,6 +89,7 @@ namespace LectionCatalog.Data.Services
                 dbLection.LinkURL = data.LinkURL;
                 dbLection.isFavorite = data.isFavorite;
                 dbLection.isWatchLater = data.isWatchLater;
+                dbLection.Duration = data.Duration;
                 dbLection.Year = data.Year;
                 dbLection.Country = data.Country;
                 dbLection.LectionCategory = data.LectionCategory;

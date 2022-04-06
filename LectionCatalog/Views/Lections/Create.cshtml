@@ -1,0 +1,97 @@
+﻿@using LectionCatalog.Data.Enum
+@model NewLectionVM
+
+
+@{
+	ViewData["Title"] = "Create a new lection";
+}
+
+
+<div class="row text">
+	<div class="col-md-8 offset-2">
+		<p>
+			<h1>Create a new lection</h1>
+		</p>
+		 
+		<div class="row">
+			<div class="col-md-8 offset-2">
+				<form asp-action="Create">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group mt-3">
+								<label asp-for="Name" class="control-label"></label>
+								<input asp-for="Name" class="form-control">
+								<span asp-validation-for="Name" class="text-danger"></span>
+							</div>
+							<div class="form-group mt-3">
+								<label asp-for="Year" class="control-label"></label>
+								<input asp-for="Year" type="number" class="form-control">
+								<span asp-validation-for="Year" class="text-danger"></span>
+							</div>
+							<div class="form-group mt-3">
+								<label asp-for="LinkURL" class="control-label"></label>
+								<input asp-for="LinkURL" class="form-control">
+								<span asp-validation-for="LinkURL" class="text-danger"></span>
+							</div>
+							<div class="form-group mt-3">
+								<label asp-for="ImageURL" class="control-label"></label>
+								<input asp-for="ImageURL" class="form-control">
+								<span asp-validation-for="ImageURL" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group mt-3">
+								<label asp-for="Duration" class="control-label"></label>
+								<input asp-for="Duration" type="number" class="form-control">
+								<span asp-validation-for="Duration" class="text-danger"></span>
+							</div>
+							<div class="form-group mt-3">
+								<label asp-for="Country" class="control-label"></label>
+								<select asp-for="Country" class="form-control" asp-items="Html.GetEnumSelectList<CountriesCategory>()"></select>
+								<span asp-validation-for="Country" class="text-danger"></span>
+							</div>
+							<div class="form-group mt-3">
+								<label asp-for="LectionCategory" class="control-label"></label>
+								<select asp-for="LectionCategory" class="form-control" asp-items="Html.GetEnumSelectList<LectionCategory>()"></select>
+								<span asp-validation-for="LectionCategory" class="text-danger"></span>
+							</div>
+							<div class="form-group mt-3">
+								<label asp-for="LectorIds" class="control-label"></label>
+								<select asp-for="LectorIds" class="form-control" asp-items="ViewBag.LectorsSelectList" multiple></select>
+								<span asp-validation-for="LectorIds" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-12 mt-3">
+							<div class="form-group">
+								<label asp-for="Description" class="control-label"></label>
+								<textarea asp-for="Description" class="form-control"></textarea>
+								<span asp-validation-for="Description" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4 offset-4 text-center my-3">
+						<img width="100%" id="ImageUrlPreview" />
+					</div>
+
+					<div class="form-group">
+						<input type="submit" value="Create" class="btn btn-outline-success float-end" />
+						<a class="btn btn-outline-secondary" asp-action="Index">Show all</a>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		$("#ImageURL").on("change", function(){
+			var output = document.getElementById('ImageUrlPreview');
+			output.src = $(this).val();
+		})
+	</script>
+}
