@@ -1,5 +1,8 @@
 ﻿using LectionCatalog.Data;
 using LectionCatalog.Data.Services;
+using LectionCatalog.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace LectionCatalog
@@ -15,6 +18,15 @@ namespace LectionCatalog
         {
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionStirng")));
             services.AddScoped<ILectionsService, LectionsService>();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+            services.AddMemoryCache();
+            services.AddSession();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            });
+
             services.AddControllersWithViews();
         }
 
@@ -29,10 +41,10 @@ namespace LectionCatalog
             app.UseStaticFiles();
 
             app.UseRouting();
-            //app.UseSession();
+            app.UseSession();
 
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -42,6 +54,7 @@ namespace LectionCatalog
             });
 
             AppDbInitializer.Seed(app);
+            AppDbInitializer.SeedUsersAndRolesAsync(app).Wait();
         }
     }
 }
