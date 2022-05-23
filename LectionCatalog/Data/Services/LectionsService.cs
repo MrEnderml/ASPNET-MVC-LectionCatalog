@@ -58,6 +58,27 @@ namespace LectionCatalog.Data.Services
                 ToListAsync();
         }
 
+        public async Task<IEnumerable> GetFavoriteLections()
+        {
+            var lections = await _context.Lections.Where(l => l.isFavorite == true).ToListAsync();
+
+            foreach(var item in lections)
+            {
+                if(item.Description.Length > 100)
+                {
+                    item.Description = item.Description.Remove(item.Description.Length - (item.Description.Length - 100));
+                    item.Description += "...";
+                }
+            }
+
+            return lections;
+        }
+
+        public Task<IEnumerable> GetHistoryLections()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Lection> GetLectionByIdAsync(int id)
         {
            var lectionDetails = await _context.Lections.
@@ -65,6 +86,12 @@ namespace LectionCatalog.Data.Services
                 ThenInclude(l => l.Lector).
                 FirstOrDefaultAsync(n => id == n.Id);
             return lectionDetails;
+        }
+
+        public async Task<IEnumerable> SearchAsync(string name)
+        {
+            var allLections = await _context.Lections.Where(e => e.Name.Contains(name)).ToListAsync();
+            return allLections;
         }
 
         public async Task<LectionDropdownsVM> GetLectionDropdownsValues()
@@ -77,7 +104,31 @@ namespace LectionCatalog.Data.Services
             return response;
         }
 
-		public async Task UpdateLectionAsync(NewLectionVM data)
+        public async Task<IEnumerable> GetWatchLaterLections()
+        {
+            var lections = await _context.Lections.Where(l => l.isWatchLater == true).ToListAsync();
+
+            foreach (var item in lections)
+            {
+                if (item.Description.Length > 100)
+                {
+                    item.Description = item.Description.Remove(item.Description.Length - (item.Description.Length - 100));
+                    item.Description += "...";
+                }
+            }
+
+            return lections;
+        }
+
+        public async Task<IEnumerable> GetLectorsFilter(int id)
+        {
+            var lections = await _context.Lections.Include(ll => ll.Lectors_Lections).
+                ThenInclude(l => l.Lector).Where(ll => ll.Lectors_Lections.All(n => n.LectorId == id)).ToListAsync();
+
+            return lections;
+        }
+
+        public async Task UpdateLectionAsync(NewLectionVM data)
 		{
             var dbLection = await _context.Lections.FirstOrDefaultAsync(n => n.Id == data.Id);
 

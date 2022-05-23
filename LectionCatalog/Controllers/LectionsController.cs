@@ -20,6 +20,7 @@ namespace LectionCatalog.Controllers
             var lectionsDropdownData = await _service.GetLectionDropdownsValues();
             ViewBag.Lectors = lectionsDropdownData.Lectors;
             ViewBag.LectionsCategory = lectionsDropdownData.LectionsCategory;
+
             return View(allLections);
         }
 
@@ -102,6 +103,23 @@ namespace LectionCatalog.Controllers
 
             await _service.AddNewLectionAsync(lection);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Search(string name)
+        {
+            var allLections = await _service.SearchAsync(name);
+            return PartialView(allLections);
+        }
+
+        public async Task<IActionResult> LectorFilter(int id)
+        {
+            var lecitons = await _service.GetLectorsFilter(id);
+
+            var lectionsDropdownData = await _service.GetLectionDropdownsValues();
+            ViewBag.Lectors = lectionsDropdownData.Lectors;
+            ViewBag.LectionsCategory = lectionsDropdownData.LectionsCategory;
+
+            return View(lecitons);
         }
     }
 }

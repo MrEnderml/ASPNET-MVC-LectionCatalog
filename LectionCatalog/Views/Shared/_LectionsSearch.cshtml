@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Lection>
+
+<div class="row">
+	@foreach (var item in Model)
+	{
+		<div class="col-md-3 col-xs-6 border-primary mb-3">
+			<div class="card mb-3" style="max-width: 325px;">
+
+				<div class="row g-0">
+					<span style="opacity: 1;">
+						<img class="rounded" style="position: absolute; top: 0; letf: 0; width: 100%" src="@item.ImageURL" />
+					</span>
+					<div class="col-md-12" style="z-index: 2">
+						<a class="text-white" style="font-size: 24px" asp-action="Edit" asp-route-id="@item.Id">
+							<i class="bi bi-pencil-square"></i>
+						</a> 
+					</div>
+					<a class="" asp-action="Details" asp-route-id="@item.Id">
+						<div class="text-lection shadow col-md-12">
+							<div class="part-text-lection">
+								<div class="" style="font-size: 16px">
+									<span class="tshadow">@item.Name</span>
+								</div>
+								<div>
+									@foreach (var lectors in item.Lectors_Lections)
+									{
+										<span class="tshadow">@lectors.Lector.FullName *</span>
+									}
+									<span class="tshadow">@item.Year * </span>
+									<span class="tshadow">@item.Duration мин</span>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+
+			</div>
+		</div>
+	}
+
+</div>

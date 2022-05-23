@@ -13,13 +13,13 @@
 }
 else
 {
-	<div class="dropdown">
+	<div class="dropdown mx-2">
 		<button class="btn btn-outline-success dropdown-toggle" id="profileBtn" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			@UserManager.GetUserName(User)
 		</button>
 
 		<div class="dropdown-menu" aria-labelledby="profileBtn">
-			<a class="dropdown-item" asp-controller="Profile" asp-action="Profile"><i class="bi bi-person-badge"></i> Profile</a>
+			<a class="dropdown-item" asp-controller="Profile" asp-action="Index"><i class="bi bi-person-badge"></i> Profile</a>
 			
 			@if (User.IsInRole("Admin"))
 			{

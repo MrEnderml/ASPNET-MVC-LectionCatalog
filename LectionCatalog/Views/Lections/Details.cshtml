@@ -9,13 +9,21 @@
 <div class="row">
 	<div class="col-md-8 offset-2 col-xs-6 border-primary mb-3">
 		<div>
-			<iframe width="100%" height="440px" src="@Model.LinkURL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+			<iframe width="100%" height="640px" src="@Model.LinkURL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 		</div>
 		<div class="py-2">
-			<h3 class="card-title">@Model.Name</h3>
-			<span class="card-text">@Model.Views Views *</span>
-			<span class="card-text">@Model.Year year *</span>
-			<span class="card-text">@Model.Duration мин</span>
+			<div class="row">
+				<div class="col-md-6">
+					<h3 class="card-title">@Model.Name</h3>
+				</div>
+				<div class="col-md-6 float-end">
+					<span class="float-end my-2" style="font-size: 28px"><i class="bi bi-heart"></i></span>
+					<span class="float-end" style="font-size: 28px"><i class="bi bi-stopwatch"></i></span>
+				</div>
+			</div>
+			<span class="card-text btm">@Model.Views Views </span>
+			<span class="card-text btm">@Model.Year year </span>
+			<span class="card-text">@Model.Duration min</span>
 			<p class="card-text my-2">@Model.Description</p>
 			<p class="card-text">
 				@if (Model.Lectors_Lections.Count > 1)

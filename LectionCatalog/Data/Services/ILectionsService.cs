@@ -12,5 +12,10 @@ namespace LectionCatalog.Data.Services
         Task AddNewLectionAsync(NewLectionVM data);
         Task UpdateLectionAsync(NewLectionVM data);
         Task DeleteLectionAsync(int id);
+        Task<IEnumerable> GetLectorsFilter(int id);
+        Task<IEnumerable> SearchAsync(string name);
+        Task<IEnumerable> GetFavoriteLections();
+        Task<IEnumerable> GetWatchLaterLections();
+        Task<IEnumerable> GetHistoryLections();
     }
 }
