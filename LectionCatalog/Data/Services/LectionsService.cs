@@ -99,6 +99,7 @@ namespace LectionCatalog.Data.Services
             var response = new LectionDropdownsVM()
             {
                 Lectors = await _context.Lectors.OrderBy(n => n.FullName).ToListAsync(),
+                Year = Enumerable.Range(2000, 22).ToList(),
                 LectionsCategory = LectionCategory.GetValues(typeof(LectionCategory)).Cast<LectionCategory>().ToList()
             };
             return response;
@@ -120,12 +121,42 @@ namespace LectionCatalog.Data.Services
             return lections;
         }
 
-        public async Task<IEnumerable> GetLectorsFilter(int id)
+        public async Task<IEnumerable> GetLectorsFilter(string name)
         {
+            var lector = await _context.Lectors.FirstOrDefaultAsync(l => l.FullName.Contains(name));
+
             var lections = await _context.Lections.Include(ll => ll.Lectors_Lections).
-                ThenInclude(l => l.Lector).Where(ll => ll.Lectors_Lections.All(n => n.LectorId == id)).ToListAsync();
+                ThenInclude(l => l.Lector).Where(ll => ll.Lectors_Lections.All(n => n.LectorId == lector.Id)).ToListAsync();
 
             return lections;
+        }
+
+        public IEnumerable GetYearFilter(List<Lection> lect, int value)
+        { 
+
+            var lections = lect.Where(l => l.Year == value).ToList();
+
+            return lections;
+        }
+
+        public IEnumerable GetCategoryFilter(List<Lection> lect, string value)
+        {
+            var lections = lect.Where(l => l.LectionCategory.ToString().Equals(value)).ToList();
+
+            return lections;
+        }
+
+        public IEnumerable GetFilterTypes(List<Lection> lect, string value)
+        {
+            switch (value)
+            {
+                case "Views up": return lect.OrderBy(n => n.Views).ToList();
+                case "Views down": return lect.OrderByDescending(n => n.Views).ToList();
+                case "Released up": return lect.OrderBy(n => n.Year).ToList();
+                case "Released down": return lect.OrderByDescending(n => n.Year).ToList();
+            }
+
+            return lect;
         }
 
         public async Task UpdateLectionAsync(NewLectionVM data)

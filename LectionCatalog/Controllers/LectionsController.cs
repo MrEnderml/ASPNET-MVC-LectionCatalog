@@ -13,15 +13,44 @@ namespace LectionCatalog.Controllers
             _service = service;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(FilterVM filterVM)
         {
             var allLections = await _service.GetAllAsync();
-
             var lectionsDropdownData = await _service.GetLectionDropdownsValues();
-            ViewBag.Lectors = lectionsDropdownData.Lectors;
-            ViewBag.LectionsCategory = lectionsDropdownData.LectionsCategory;
 
-            return View(allLections);
+            FilterVM filterLections = new FilterVM()
+            {
+                Lections = (List<Models.Lection>)allLections,
+                LectionDropdownsVM = lectionsDropdownData
+            };
+
+            if (!string.IsNullOrEmpty(filterVM.SelectedLector))
+            {
+                filterLections.Lections = (List<Models.Lection>)await _service.GetLectorsFilter(filterVM.SelectedLector);
+            }
+
+            if (filterVM.SelectedYear != 0)
+            {
+                filterLections.Lections = (List<Models.Lection>)_service.GetYearFilter(filterLections.Lections, filterVM.SelectedYear);
+            }
+
+            if (!string.IsNullOrEmpty(filterVM.SelectedCategory))
+            {
+                filterLections.Lections = (List<Models.Lection>)_service.GetCategoryFilter(filterLections.Lections, filterVM.SelectedCategory);
+            }
+
+            if (!string.IsNullOrEmpty(filterVM.SelectedFilter))
+            {
+                filterLections.Lections = (List<Models.Lection>)_service.GetFilterTypes(filterLections.Lections, filterVM.SelectedFilter);
+            }
+
+            ViewBag.selectedLector = filterVM.SelectedLector != null ? filterVM.SelectedLector : "Lectors";
+            ViewBag.selectedYear = filterVM.SelectedYear != 0 ? filterVM.SelectedYear.ToString() : "Year";
+            ViewBag.selectedCategory = filterVM.SelectedCategory != null ? filterVM.SelectedCategory : "Category";
+            ViewBag.selectedFilter = filterVM.SelectedFilter != null ? filterVM.SelectedFilter : "Filter";
+
+            return View(filterLections);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -109,17 +138,6 @@ namespace LectionCatalog.Controllers
         {
             var allLections = await _service.SearchAsync(name);
             return PartialView(allLections);
-        }
-
-        public async Task<IActionResult> LectorFilter(int id)
-        {
-            var lecitons = await _service.GetLectorsFilter(id);
-
-            var lectionsDropdownData = await _service.GetLectionDropdownsValues();
-            ViewBag.Lectors = lectionsDropdownData.Lectors;
-            ViewBag.LectionsCategory = lectionsDropdownData.LectionsCategory;
-
-            return View(lecitons);
         }
     }
 }
