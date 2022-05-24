@@ -25,6 +25,5 @@ namespace LectionCatalog.Data
         public DbSet<Lector> Lectors { get; set; }
         public DbSet<Lection> Lections { get; set; }
         public DbSet<Lector_Lection> Lectors_Lections { get; set; }
-
     }
 }

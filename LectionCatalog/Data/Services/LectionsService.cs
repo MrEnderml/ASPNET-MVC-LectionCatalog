@@ -58,22 +58,6 @@ namespace LectionCatalog.Data.Services
                 ToListAsync();
         }
 
-        public async Task<IEnumerable> GetFavoriteLections()
-        {
-            var lections = await _context.Lections.Where(l => l.isFavorite == true).ToListAsync();
-
-            foreach(var item in lections)
-            {
-                if(item.Description.Length > 100)
-                {
-                    item.Description = item.Description.Remove(item.Description.Length - (item.Description.Length - 100));
-                    item.Description += "...";
-                }
-            }
-
-            return lections;
-        }
-
         public Task<IEnumerable> GetHistoryLections()
         {
             throw new NotImplementedException();
@@ -105,9 +89,27 @@ namespace LectionCatalog.Data.Services
             return response;
         }
 
-        public async Task<IEnumerable> GetWatchLaterLections()
+        public async Task<IEnumerable> GetFavoriteLections(string listFavorites)
         {
-            var lections = await _context.Lections.Where(l => l.isWatchLater == true).ToListAsync();
+            List<string> list = listFavorites.Split(' ').ToList();
+            var lections = await _context.Lections.Where(l => list.Any(i => i == l.Id.ToString())).ToListAsync();
+
+            foreach (var item in lections)
+            {
+                if (item.Description.Length > 100)
+                {
+                    item.Description = item.Description.Remove(item.Description.Length - (item.Description.Length - 100));
+                    item.Description += "...";
+                }
+            }
+
+            return lections;
+        }
+
+        public async Task<IEnumerable> GetWatchLaterLections(string listWatchLater)
+        {
+            List<string> list = listWatchLater.Split(' ').ToList();
+            var lections = await _context.Lections.Where(l => list.Any(i => i == l.Id.ToString())).ToListAsync();
 
             foreach (var item in lections)
             {

@@ -17,8 +17,8 @@
 					<h3 class="card-title">@Model.Name</h3>
 				</div>
 				<div class="col-md-6 float-end">
-					<span class="float-end my-2" style="font-size: 28px"><i class="bi bi-heart"></i></span>
-					<span class="float-end" style="font-size: 28px"><i class="bi bi-stopwatch"></i></span>
+					<span onclick="ajaxFavoriteRequest()" class="float-end mx-2" style="font-size: 32px"><i class="bi bi-heart"></i></span>
+					<span onclick="ajaxWatchLaterRequest()" class="float-end" style="font-size: 32px"><i class="bi bi-stopwatch"></i></span>
 				</div>
 			</div>
 			<span class="card-text btm">@Model.Views Views </span>
@@ -39,9 +39,67 @@
 					<span>@lector.Lector.FullName </span>
 				}
 			</p>
-			<p class="card-text">
+			<p class="card-text p-1">
 				<span class="bg-black text-white rounded px-1">@Model.LectionCategory</span>
 			</p>
 		</div>
 	</div>
 </div>>
+
+<div class="container" id="addFWLection" style="display: none;position: fixed;bottom: 1%; left: 1%;background-color: #524646;font-size: 15px;color: white; padding: 6px;width: 25%">
+	<span id="addFWLectionText">Lection was added to Favorite list</span>
+	<button type="button" class="btn-close btn-close-white float-end" onclick="closeModalWindow()" aria-label="Close"></button>
+</div>
+
+<script>
+	function showModalWindow() {
+		console.log("Show");
+		$("#addFWLection").show(function(){
+    		setTimeout(() => {
+        		$("#addFWLection").hide();
+			},4000)
+		});
+	}
+	function closeModalWindow(){
+		console.log("Hide");
+		$("#addFWLection").hide();
+	}
+
+	function ajaxFavoriteRequest(){
+		console.log("Success click on heart");
+		$.ajax({
+			url: '/Profile/addFavorite',
+			data: { LectionId: @Model.Id },
+			dataType: "json",
+			type: "get",
+			cache: false,
+			success: function (result) {
+				console.log(result);
+				$("#addFWLectionText").text(result);
+				showModalWindow();
+			},
+			error: function () {
+				console.log("Error");
+			}
+		});
+	}
+
+	function ajaxWatchLaterRequest(){
+		console.log("Success click on watch");
+		$.ajax({
+			url: '/Profile/addWatchLater',
+			data: { LectionId: @Model.Id },
+			dataType: "json",
+			type: "get",
+			cache: false,
+			success: function (result) {
+				console.log(result);
+				$("#addFWLectionText").text(result);
+				showModalWindow();
+			},
+			error: function () {
+				console.log("Error");
+			}
+		});
+	}
+</script>

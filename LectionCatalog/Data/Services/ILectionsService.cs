@@ -17,8 +17,8 @@ namespace LectionCatalog.Data.Services
         IEnumerable GetCategoryFilter(List<Lection> lect, string value);
         IEnumerable GetFilterTypes(List<Lection> lect, string value);
         Task<IEnumerable> SearchAsync(string name);
-        Task<IEnumerable> GetFavoriteLections();
-        Task<IEnumerable> GetWatchLaterLections();
+        Task<IEnumerable> GetFavoriteLections(string listFavorites);
+        Task<IEnumerable> GetWatchLaterLections(string listWatchLater);
         Task<IEnumerable> GetHistoryLections();
     }
 }

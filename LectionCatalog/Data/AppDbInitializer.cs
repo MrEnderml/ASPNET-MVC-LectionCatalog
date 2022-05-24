@@ -193,6 +193,7 @@ namespace LectionCatalog.Data
                 string adminUserEmail = "admin@lCatalog.com";
 
                 var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
+
                 if (adminUser == null)
                 {
                     var newAdminUser = new ApplicationUser()
@@ -200,7 +201,7 @@ namespace LectionCatalog.Data
                         FullName = "Admin User",
                         UserName = "Admin",
                         Email = adminUserEmail,
-                        EmailConfirmed = true,
+                        EmailConfirmed = true
                     };
                     await userManager.CreateAsync(newAdminUser, "Text@1234?");
                     await userManager.AddToRoleAsync(newAdminUser, UserRoles.Admin);
@@ -217,7 +218,7 @@ namespace LectionCatalog.Data
                         FullName = "Application User",
                         UserName = "app-User",
                         Email = appUserEmail,
-                        EmailConfirmed = true,
+                        EmailConfirmed = true
                     };
                     await userManager.CreateAsync(newAppUser, "Text@1234?");
                     await userManager.AddToRoleAsync(newAppUser, UserRoles.User);

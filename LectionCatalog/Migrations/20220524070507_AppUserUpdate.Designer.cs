@@ -4,6 +4,7 @@ using LectionCatalog.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LectionCatalog.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220524070507_AppUserUpdate")]
+    partial class AppUserUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,15 +43,7 @@ namespace LectionCatalog.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Favorites")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("History")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -86,10 +80,6 @@ namespace LectionCatalog.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("WatchLater")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -110,6 +100,15 @@ namespace LectionCatalog.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId2")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Country")
                         .HasColumnType("int");
@@ -149,6 +148,12 @@ namespace LectionCatalog.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ApplicationUserId1");
+
+                    b.HasIndex("ApplicationUserId2");
 
                     b.ToTable("Lections");
                 });
@@ -326,6 +331,21 @@ namespace LectionCatalog.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("LectionCatalog.Models.Lection", b =>
+                {
+                    b.HasOne("LectionCatalog.Models.ApplicationUser", null)
+                        .WithMany("Favorites")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("LectionCatalog.Models.ApplicationUser", null)
+                        .WithMany("History")
+                        .HasForeignKey("ApplicationUserId1");
+
+                    b.HasOne("LectionCatalog.Models.ApplicationUser", null)
+                        .WithMany("WatchLater")
+                        .HasForeignKey("ApplicationUserId2");
+                });
+
             modelBuilder.Entity("LectionCatalog.Models.Lector_Lection", b =>
                 {
                     b.HasOne("LectionCatalog.Models.Lection", "Lection")
@@ -394,6 +414,15 @@ namespace LectionCatalog.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("LectionCatalog.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Favorites");
+
+                    b.Navigation("History");
+
+                    b.Navigation("WatchLater");
                 });
 
             modelBuilder.Entity("LectionCatalog.Models.Lection", b =>

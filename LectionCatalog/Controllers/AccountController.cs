@@ -25,6 +25,7 @@ namespace LectionCatalog.Controllers
         public async Task<IActionResult> Users()
         {
             var users = await _context.Users.ToListAsync();
+
             return View(users);
         }
 
@@ -92,6 +93,7 @@ namespace LectionCatalog.Controllers
                 Email = registerVM.EmailAddress,
                 UserName = registerVM.FullName
             };
+
             var newUserResponse = await _userManager.CreateAsync(newUser, registerVM.Password);
 
             if (newUserResponse.Succeeded)

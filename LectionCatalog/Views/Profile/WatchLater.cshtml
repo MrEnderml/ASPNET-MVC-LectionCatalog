@@ -5,27 +5,37 @@
 		<partial name="_ProfileMenuNavigation.cshtml" />
 	</div>
 	<div class="col-md-9">
-		@foreach(var item in Model){
-			<div class="col-md-12 m-3 d-flex">
-				<div>
-					<a asp-controller="Lections" asp-action="Details" asp-route-id="@item.Id">
-						<img width="360px" src="@item.ImageURL" />
-					</a>
-				</div>
-				<div class="px-2">
+		@if (ViewBag.Count)
+		{
+			@foreach (var item in Model)
+			{
+				<div class="col-md-12 m-3 d-flex">
 					<div>
+						<a asp-controller="Lections" asp-action="Details" asp-route-id="@item.Id">
+							<img width="360px" src="@item.ImageURL" />
+						</a>
+					</div>
+					<div class="px-2">
 						<div>
-							<h3>@item.Name</h3>
+							<div>
+								<h3>@item.Name</h3>
+							</div>
+							<div class="my-1">
+								<span class="btm">@item.Views Views </span>
+								<span>@item.Year year</span>
+							</div>
 						</div>
-						<div class="my-1">
-							<span class="btm">@item.Views Views </span>
-							<span>@item.Year year</span>
+						<div>
+							<p>@item.Description</p>
 						</div>
-					</div>
-					<div>
-						<p>@item.Description</p>
 					</div>
 				</div>
+			}
+		}
+		else
+		{
+			<div class="col-md-12 m-3 text-center">
+				<h2>There is no any watch later lection</h2>
 			</div>
 		}
 	</div>
