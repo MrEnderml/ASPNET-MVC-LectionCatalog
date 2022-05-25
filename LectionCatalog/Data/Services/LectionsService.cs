@@ -24,8 +24,8 @@ namespace LectionCatalog.Data.Services
                 isFavorite = false,
                 isWatchLater = false,
                 Duration = data.Duration,
-                ImageURL = data.ImageURL,
-                LinkURL = data.LinkURL,
+                ImageURL = getYouTubeThumbnail(data.LinkURL),
+                LinkURL = getCorrectYoutubeLink(data.LinkURL),
                 Country = data.Country,
                 LectionCategory = data.LectionCategory,
             };
@@ -45,7 +45,44 @@ namespace LectionCatalog.Data.Services
             await _context.SaveChangesAsync();
 		}
 
-		public Task DeleteLectionAsync(int id)
+        public async Task UpdateLectionAsync(NewLectionVM data)
+        {
+            var dbLection = await _context.Lections.FirstOrDefaultAsync(n => n.Id == data.Id);
+
+            if (dbLection != null)
+            {
+                dbLection.Name = data.Name;
+                dbLection.Description = data.Description;
+                dbLection.ImageURL = getYouTubeThumbnail(data.LinkURL);
+                dbLection.LinkURL = data.LinkURL;
+                dbLection.isFavorite = data.isFavorite;
+                dbLection.isWatchLater = data.isWatchLater;
+                dbLection.Duration = data.Duration;
+                dbLection.Year = data.Year;
+                dbLection.Country = data.Country;
+                dbLection.LectionCategory = data.LectionCategory;
+
+                await _context.SaveChangesAsync();
+            }
+
+            var existingLectorsDb = _context.Lectors_Lections.Where(n => n.LectionId == data.Id).ToList();
+            _context.Lectors_Lections.RemoveRange(existingLectorsDb);
+            await _context.SaveChangesAsync();
+
+            foreach (var lectorId in data.LectorIds)
+            {
+                var newLectorLection = new Lector_Lection()
+                {
+                    LectionId = data.Id,
+                    LectorId = lectorId
+                };
+                await _context.Lectors_Lections.AddAsync(newLectorLection);
+            }
+            await _context.SaveChangesAsync();
+
+        }
+
+        public Task DeleteLectionAsync(int id)
 		{
 			throw new NotImplementedException();
 		}
@@ -56,11 +93,6 @@ namespace LectionCatalog.Data.Services
                 Include(ll => ll.Lectors_Lections).
                 ThenInclude(l => l.Lector).
                 ToListAsync();
-        }
-
-        public Task<IEnumerable> GetHistoryLections()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<Lection> GetLectionByIdAsync(int id)
@@ -89,10 +121,10 @@ namespace LectionCatalog.Data.Services
             return response;
         }
 
-        public async Task<IEnumerable> GetFavoriteLections(string listFavorites)
+        public async Task<IEnumerable> GetLectionsByList(string list)
         {
-            List<string> list = listFavorites.Split(' ').ToList();
-            var lections = await _context.Lections.Where(l => list.Any(i => i == l.Id.ToString())).ToListAsync();
+            List<string> filterList = list.Split(' ').ToList();
+            var lections = await _context.Lections.Where(l => filterList.Any(i => i == l.Id.ToString())).ToListAsync();
 
             foreach (var item in lections)
             {
@@ -105,24 +137,7 @@ namespace LectionCatalog.Data.Services
 
             return lections;
         }
-
-        public async Task<IEnumerable> GetWatchLaterLections(string listWatchLater)
-        {
-            List<string> list = listWatchLater.Split(' ').ToList();
-            var lections = await _context.Lections.Where(l => list.Any(i => i == l.Id.ToString())).ToListAsync();
-
-            foreach (var item in lections)
-            {
-                if (item.Description.Length > 100)
-                {
-                    item.Description = item.Description.Remove(item.Description.Length - (item.Description.Length - 100));
-                    item.Description += "...";
-                }
-            }
-
-            return lections;
-        }
-
+ 
         public async Task<IEnumerable> GetLectorsFilter(string name)
         {
             var lector = await _context.Lectors.FirstOrDefaultAsync(l => l.FullName.Contains(name));
@@ -160,42 +175,36 @@ namespace LectionCatalog.Data.Services
 
             return lect;
         }
+        public string getYouTubeThumbnail(string YoutubeUrl)
+        {
+            string youTubeThumb = string.Empty;
+            if (YoutubeUrl == "")
+                return "";
 
-        public async Task UpdateLectionAsync(NewLectionVM data)
-		{
-            var dbLection = await _context.Lections.FirstOrDefaultAsync(n => n.Id == data.Id);
-
-            if (dbLection != null)
+            if (YoutubeUrl.IndexOf("=") > 0)
             {
-                dbLection.Name = data.Name;
-                dbLection.Description = data.Description;
-                dbLection.ImageURL = data.ImageURL;
-                dbLection.LinkURL = data.LinkURL;
-                dbLection.isFavorite = data.isFavorite;
-                dbLection.isWatchLater = data.isWatchLater;
-                dbLection.Duration = data.Duration;
-                dbLection.Year = data.Year;
-                dbLection.Country = data.Country;
-                dbLection.LectionCategory = data.LectionCategory;
-
-                await _context.SaveChangesAsync();
+                youTubeThumb = YoutubeUrl.Split('=')[1];
+            }
+            else if (YoutubeUrl.IndexOf("/v/") > 0)
+            {
+                string strVideoCode = YoutubeUrl.Substring(YoutubeUrl.IndexOf("/v/") + 3);
+                int ind = strVideoCode.IndexOf("?");
+                youTubeThumb = strVideoCode.Substring(0, ind == -1 ? strVideoCode.Length : ind);
+            }
+            else if (YoutubeUrl.IndexOf('/') < 6)
+            {
+                youTubeThumb = YoutubeUrl.Split('/')[3];
+            }
+            else if (YoutubeUrl.IndexOf('/') > 6)
+            {
+                youTubeThumb = YoutubeUrl.Split('/')[1];
             }
 
-            var existingLectorsDb = _context.Lectors_Lections.Where(n => n.LectionId == data.Id).ToList();
-            _context.Lectors_Lections.RemoveRange(existingLectorsDb);
-            await _context.SaveChangesAsync();
-
-            foreach (var lectorId in data.LectorIds)
-            {
-                var newLectorLection = new Lector_Lection()
-                {
-                    LectionId = data.Id,
-                    LectorId = lectorId
-                };
-                await _context.Lectors_Lections.AddAsync(newLectorLection);
-            }
-            await _context.SaveChangesAsync();
-
+            return "http://img.youtube.com/vi/" + youTubeThumb + "/mqdefault.jpg";
+        }     
+        public string getCorrectYoutubeLink(string YoutubeUrl)
+        {
+            return YoutubeUrl.Replace("watch?v=", "embed/");
         }
-	}
+    }
 }

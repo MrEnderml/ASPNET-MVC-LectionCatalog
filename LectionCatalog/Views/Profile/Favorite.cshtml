@@ -1,15 +1,15 @@
 ﻿@model IEnumerable<Lection>
 
 <div class="row">
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<partial name="_ProfileMenuNavigation.cshtml" />
 	</div>
-	<div class="col-md-9">
+	<div class="col-md-8" style="background-color: #f3f1f1">
 		@if (ViewBag.Count)
 		{
 			@foreach (var item in Model)
 			{
-				<div class="col-md-12 m-3 d-flex">
+				<div class="col-md-12 m-1 d-flex lect">
 					<div>
 						<a asp-controller="Lections" asp-action="Details" asp-route-id="@item.Id">
 							<img width="360px" src="@item.ImageURL" />
@@ -29,6 +29,9 @@
 							<p>@item.Description</p>
 						</div>
 					</div>
+					<div style="font-size: 22px;margin-left: auto;margin-right: 0px;"> 
+						<button type="button" class="btn-close" onclick="ajaxDeleteRequest(@item.Id)" aria-label="Close"></button>
+					</div>
 				</div>
 			}
 		}
@@ -40,3 +43,23 @@
 		}
 	</div>
 </div>
+
+<script>
+	function ajaxDeleteRequest(id){
+		console.log("Success clicked on delete button");
+		$.ajax({
+			url: '/Profile/delFavorite',
+			data: { LectionId: id, eq: $(".lect").index() },
+			dataType: "json",
+			type: "get",
+			cache: false,
+			success: function (result) {
+				$(".lect").eq(result).remove();
+				console.log(result);
+			},
+			error: function () {
+				
+			}
+		});
+	}
+</script>

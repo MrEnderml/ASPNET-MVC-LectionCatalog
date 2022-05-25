@@ -73,7 +73,6 @@ namespace LectionCatalog.Controllers
                 Name = lectionDetails.Name,
                 Description = lectionDetails.Description,  
                 Year = lectionDetails.Year,
-                ImageURL = lectionDetails.ImageURL,
                 Duration = lectionDetails.Duration,
                 LinkURL = lectionDetails.LinkURL,
                 LectionCategory = lectionDetails.LectionCategory,

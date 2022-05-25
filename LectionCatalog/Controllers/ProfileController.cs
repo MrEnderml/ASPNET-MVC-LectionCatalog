@@ -40,28 +40,6 @@ namespace LectionCatalog.Controllers
 			return View(newUser);
 		}
 
-		public void CheckUserName()
-		{
-			if(user == null)
-            {
-				string userName = HttpContext.User.Identity.Name;
-				user = _userManager.FindByNameAsync(userName).Result;
-			}
-
-			if (user.Favorites == null || user.Favorites == "0")
-			{
-				user.Favorites = "";
-			}
-			if(user.WatchLater == null || user.WatchLater == "0")
-            {
-				user.WatchLater = "";
-            }
-			if(user.History == null || user.History == "0")
-            {
-				user.History = "";
-            }
-		}
-
 		[HttpGet]
 		public async Task<JsonResult> addFavorite(int LectionId)
         {
@@ -97,20 +75,44 @@ namespace LectionCatalog.Controllers
 			return Json("It has already been added");
 		}
 
-		public bool Count(IEnumerable lections)
-        {
-			foreach(var item in lections)
-            {
-				return true;
-            }
-			return false;
-        }
+		public async Task<JsonResult> addHistory(int LectionId)
+		{
+			CheckUserName();
 
+			if (!user.History.Contains(LectionId.ToString()))
+			{
+				user.History += LectionId.ToString() + " ";
+				var result = await _userManager.UpdateAsync(user);
+
+				if (result.Succeeded)
+				{
+					return Json("Success");
+				}
+			}
+			return Json("Something is wrong");
+		}
+		public async Task<JsonResult> delFavorite(int lectionId, int eq)
+        {
+			CheckUserName();
+
+			if (user.Favorites.Contains(lectionId.ToString()))
+			{
+				var sub = lectionId.ToString() + " ";
+				user.Favorites = user.Favorites.Replace(sub, "");
+				var result = await _userManager.UpdateAsync(user);
+
+				if (result.Succeeded)
+				{
+					return Json(eq);
+				}
+			}
+			return Json("");
+		}
 		public async Task<IActionResult> Favorite()
         {
 			CheckUserName();
 
-			var lections = await _service.GetFavoriteLections(user.Favorites);
+			var lections = await _service.GetLectionsByList(user.Favorites);
 			ViewBag.Count = Count(lections);
 
 			return View(lections);
@@ -119,14 +121,49 @@ namespace LectionCatalog.Controllers
 		{
 			CheckUserName();
 
-			var lections = await _service.GetWatchLaterLections(user.WatchLater);
+			var lections = await _service.GetLectionsByList(user.WatchLater);
 			ViewBag.Count = Count(lections);
 
 			return View(lections);
 		}
-		public IActionResult History()
+		public async Task<IActionResult> History()
 		{
-			return View();
+			CheckUserName();
+
+			var lections = await _service.GetLectionsByList(user.History);
+			ViewBag.Count = Count(lections);
+
+			return View(lections);
 		}
+		public void CheckUserName()
+		{
+			if (user == null)
+			{
+				string userName = HttpContext.User.Identity.Name;
+				user = _userManager.FindByNameAsync(userName).Result;
+			}
+
+			if (user.Favorites == null || user.Favorites == "0")
+			{
+				user.Favorites = "";
+			}
+			if (user.WatchLater == null || user.WatchLater == "0")
+			{
+				user.WatchLater = "";
+			}
+			if (user.History == null || user.History == "0")
+			{
+				user.History = "";
+			}
+		}
+		public bool Count(IEnumerable lections)
+		{
+			foreach (var item in lections)
+			{
+				return true;
+			}
+			return false;
+		}
+
 	}
 }

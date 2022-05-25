@@ -25,15 +25,11 @@ namespace LectionCatalog.Data.ViewModels
         [Required(ErrorMessage = "Description is required")]
         public int Year { get; set; }
 
-        [Display(Name = "Lection preview URL")]
-        [Required(ErrorMessage = "Lection preview URL is required")]
-        public string ImageURL { get; set; }
-
         [Display(Name = "Lection link")]
         [Required(ErrorMessage = "Lection link is required")]
         public string LinkURL { get; set; }
 
-        [Display(Name = "Lection duration")]
+        [Display(Name = "Lection duration (minutes)")]
         [Required(ErrorMessage = "Lection duration is required")]
         public int Duration { get; set; }
 

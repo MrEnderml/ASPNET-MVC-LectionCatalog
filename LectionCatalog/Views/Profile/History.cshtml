@@ -4,7 +4,7 @@
 	<div class="col-md-3">
 		<partial name="_ProfileMenuNavigation.cshtml" />
 	</div>
-	<div class="col-md-9">
+	<div class="col-md-8">
 		@if (ViewBag.Count)
 		{
 			@foreach (var item in Model)
@@ -35,7 +35,7 @@
 		else
 		{
 			<div class="col-md-12 m-3 text-center">
-				<h2>There is no any favorite lection</h2>
+				<h2>History is empty</h2>
 			</div>
 		}
 	</div>

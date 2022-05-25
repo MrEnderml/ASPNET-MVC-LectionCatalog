@@ -19,6 +19,10 @@ namespace LectionCatalog
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionStirng")));
             services.AddScoped<ILectionsService, LectionsService>();
 
+            services.AddMvc().AddJsonOptions(options => {
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
+
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
             services.AddMemoryCache();
             services.AddSession();

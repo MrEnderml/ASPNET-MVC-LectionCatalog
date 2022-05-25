@@ -102,4 +102,24 @@
 			}
 		});
 	}
+
+	function ajaxHistoryRequest(){
+		console.log("Success enter to the lection");
+		$.ajax({
+			url: '/Profile/addHistory',
+			data: { LectionId: @Model.Id },
+			dataType: "json",
+			type: "get",
+			cache: false,
+			success: function (result) {
+				$("#addFWLectionText").text(result);
+				console.log(result);
+			},
+			error: function (result) {
+				console.log(result);
+			}
+		});
+	}
+
+	$(document).ready(ajaxHistoryRequest);
 </script>
