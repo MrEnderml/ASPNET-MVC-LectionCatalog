@@ -1,5 +1,6 @@
 ﻿@*Define mddel*@
 @model FilterVM
+@using LectionCatalog.Data.Helpers
 
 @{
 	ViewData["Title"] = "List of Movies";
@@ -12,6 +13,9 @@
 		<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 			<form id="formFilter" method="get" asp-action="Index">
 				<ul class="navbar-nav flex-grow-1">
+					<li class="nav-item" style="display: @ViewBag.buttonClose">
+						<a id="CloseFilter" asp-action="Index" style="padding-top: 20px;padding-right: 5px;font-size: 26px;text-decoration: none;color: black">x</a>
+					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link text-dark dropdown-toggle" id="lectorsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-weight: 700; font-size: 18px">
 							<i class="bi bi-star-fill pe-2"></i>
@@ -83,7 +87,7 @@
 
 					<div class="row g-0">
 						<span style="opacity: 1;">
-							<img class="rounded" style="position: absolute; top: 0; letf: 0; width: 100%" src="@item.ImageURL" />
+							<img class="rounded" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" src="@item.ImageURL" />
 						</span>
 						<div class="col-md-12" style="z-index: 2">
 							<a class="text-white" style="font-size: 24px" asp-action="Edit" asp-route-id="@item.Id">
@@ -117,24 +121,31 @@
 
 </div>
 
-<div style="position: fixed; right: 25px; bottom: 25px" class="text-dark">
-	<a asp-controller="Lections" asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle"></i>Add New</a>
+<div class="container text-center">
+	<div class="btn-group">
+		@Html.PageLinks(Model.PageInfo, x => Url.Action("Index",new {filterVM = Model,  page = x, filt = true, sLector = ViewBag.SelectedLector, sYear = @ViewBag.SelectedYear,
+			sCategory = ViewBag.SelectedCategory, sFilter = ViewBag.SelectedFilter}))
+	</div>
 </div>
 
 <script>
 	function addSelectedLector(i) {
+		$("#CloseFilter").show();
 		$("#SelectedLector").val($(i).val());
 		$("#formFilter").submit();
 	}
 	function addSelectedCategory(i) {
+		$("#CloseFilter").show();
 		$("#SelectedCategory").val($(i).val());
 		$("#formFilter").submit();
 	}
 	function addSelectedYear(i) {
+		$("#CloseFilter").show();
 		$("#SelectedYear").val($(i).val());
 		$("#formFilter").submit();
 	}
 	function addSelectedFilter(i){
+		$("#CloseFilter").show();
 		$("#SelectedFilter").val($(i).val());
 		$("#formFilter").submit();
 	}

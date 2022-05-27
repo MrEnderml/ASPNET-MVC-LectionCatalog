@@ -40,13 +40,25 @@ body {
 }
 
 .tshadow {
-    background: rgba(0,0,0,.2);
+    background: rgba(0,0,0,.3);
 }
 
 a.b-bottom:hover {
     border-bottom: 0.3rem solid;
     border-bottom-color: rebeccapurple;
     line-height: 0px;
+}
+
+.b-bottom-set {
+    border-bottom: 0.3rem solid;
+    border-bottom-color: rebeccapurple;
+    line-height: 0px;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
 }
 
 a.b-bottom {

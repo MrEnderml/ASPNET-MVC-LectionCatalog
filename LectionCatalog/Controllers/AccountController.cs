@@ -91,7 +91,10 @@ namespace LectionCatalog.Controllers
             {
                 FullName = registerVM.FullName,
                 Email = registerVM.EmailAddress,
-                UserName = registerVM.FullName
+                UserName = registerVM.FullName,
+                Favorites = "",
+                WatchLater = "",
+                History = ""
             };
 
             var newUserResponse = await _userManager.CreateAsync(newUser, registerVM.Password);

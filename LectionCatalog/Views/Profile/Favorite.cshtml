@@ -4,52 +4,57 @@
 	<div class="col-md-2">
 		<partial name="_ProfileMenuNavigation.cshtml" />
 	</div>
-	<div class="col-md-8" style="background-color: #f3f1f1">
+	<div class="col-md-8 cont" style="background-color: #f8f8f8">
 		@if (ViewBag.Count)
 		{
 			@foreach (var item in Model)
 			{
-				<div class="col-md-12 m-1 d-flex lect">
-					<div>
+				<div class="lect">
+					<div class="col-md-12 m-1 d-flex">
+						<div>
 						<a asp-controller="Lections" asp-action="Details" asp-route-id="@item.Id">
 							<img width="360px" src="@item.ImageURL" />
 						</a>
-					</div>
-					<div class="px-2">
-						<div>
+						</div>
+						<div class="px-2">
 							<div>
-								<h3>@item.Name</h3>
+								<div>
+									<h3>@item.Name</h3>
+								</div>
+								<div class="my-1">
+									<span class="btm">@item.Views Views </span>
+									<span>@item.Year year</span>
+								</div>
 							</div>
-							<div class="my-1">
-								<span class="btm">@item.Views Views </span>
-								<span>@item.Year year</span>
+							<div>
+								<p>@item.Description</p>
 							</div>
 						</div>
-						<div>
-							<p>@item.Description</p>
+						<div class="cont-btn-close" style="display: none; font-size: 22px;margin-left: auto;margin-right: 0px;"> 
+							<button type="button" class="btn-close" onclick="ajaxDeleteRequest(this, @item.Id)" aria-label="Close"></button>
 						</div>
 					</div>
-					<div style="font-size: 22px;margin-left: auto;margin-right: 0px;"> 
-						<button type="button" class="btn-close" onclick="ajaxDeleteRequest(@item.Id)" aria-label="Close"></button>
-					</div>
+					<hr />
 				</div>
+					
 			}
 		}
-		else
-		{
-			<div class="col-md-12 m-3 text-center">
-				<h2>There is no any favorite lection</h2>
-			</div>
-		}
+		<div class="col-md-12 m-3 text-center delTextCtx" style="display: @(ViewBag.Count? "none": "block")">
+			<h2>There is no any favorite lection</h2>
+		</div>
+
+	</div>
+	<div class="col-md-2" style="background-color: #f1f1f1; font-size: 18px; position: fixed; height: 100%; right: 0%">
+		<a onclick="ajaxDeleteAllRequest()"><i class="bi bi-trash"></i> Delete All Records</a>
 	</div>
 </div>
 
 <script>
-	function ajaxDeleteRequest(id){
+	function ajaxDeleteRequest(ctx, id){
 		console.log("Success clicked on delete button");
 		$.ajax({
 			url: '/Profile/delFavorite',
-			data: { LectionId: id, eq: $(".lect").index() },
+			data: { LectionId: id, eq: $(".btn-close").index(ctx) },
 			dataType: "json",
 			type: "get",
 			cache: false,
@@ -62,4 +67,33 @@
 			}
 		});
 	}
+
+	function ajaxDeleteAllRequest(){
+		console.log("Success clicked on delete button");
+		$.ajax({
+			url: '/Profile/delAllRecords',
+			data: {type: 0 },
+			dataType: "json",
+			type: "get",
+			cache: false,
+			success: function (result) {
+				$(".lect").remove();
+				$(".delTextCtx").show();
+			},
+			error: function () {
+				
+			}
+		});
+	}
+	
+
+	$(".lect").mouseenter(function(){
+		console.log($(".lect").index(this),"MoserEnter");
+		 $(".cont-btn-close").eq($(".lect").index(this)).show();
+	});
+
+	$(".lect").mouseleave(function(){
+		console.log($(".lect").index(this), "MOUSELeave");
+		$(".cont-btn-close").eq($(".lect").index(this)).hide();
+	});
 </script>

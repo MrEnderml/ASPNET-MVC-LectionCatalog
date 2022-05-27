@@ -24,6 +24,7 @@ namespace LectionCatalog.Data.Services
                 isFavorite = false,
                 isWatchLater = false,
                 Duration = data.Duration,
+                Views = data.Views,
                 ImageURL = getYouTubeThumbnail(data.LinkURL),
                 LinkURL = getCorrectYoutubeLink(data.LinkURL),
                 Country = data.Country,
@@ -55,6 +56,7 @@ namespace LectionCatalog.Data.Services
                 dbLection.Description = data.Description;
                 dbLection.ImageURL = getYouTubeThumbnail(data.LinkURL);
                 dbLection.LinkURL = data.LinkURL;
+                dbLection.Views = data.Views;
                 dbLection.isFavorite = data.isFavorite;
                 dbLection.isWatchLater = data.isWatchLater;
                 dbLection.Duration = data.Duration;
@@ -82,17 +84,22 @@ namespace LectionCatalog.Data.Services
 
         }
 
-        public Task DeleteLectionAsync(int id)
+        public async Task DeleteLectionAsync(int id)
 		{
-			throw new NotImplementedException();
+            var lection = await _context.Lections.FirstOrDefaultAsync(n => n.Id == id);
+            if(lection != null)
+            {
+                _context.Lections.Remove(lection);
+                await _context.SaveChangesAsync();
+            }
 		}
 
-		public async Task<IEnumerable> GetAllAsync()
+		public async Task<List<Lection>> GetAllAsync()
         {
             return await _context.Lections.
-                Include(ll => ll.Lectors_Lections).
-                ThenInclude(l => l.Lector).
-                ToListAsync();
+                 Include(ll => ll.Lectors_Lections).
+                 ThenInclude(l => l.Lector).
+                 ToListAsync();
         }
 
         public async Task<Lection> GetLectionByIdAsync(int id)
@@ -177,6 +184,7 @@ namespace LectionCatalog.Data.Services
         }
         public string getYouTubeThumbnail(string YoutubeUrl)
         {
+            YoutubeUrl = getUncorrectYoutubeLink(YoutubeUrl);
             string youTubeThumb = string.Empty;
             if (YoutubeUrl == "")
                 return "";
@@ -205,6 +213,15 @@ namespace LectionCatalog.Data.Services
         public string getCorrectYoutubeLink(string YoutubeUrl)
         {
             return YoutubeUrl.Replace("watch?v=", "embed/");
+        }
+
+        public string getUncorrectYoutubeLink(string YoutubeUrl)
+        {
+            if (YoutubeUrl.Contains("embed/"))
+            {
+                return YoutubeUrl.Replace("embed/", "watch?v=");
+            }
+            return YoutubeUrl;
         }
     }
 }

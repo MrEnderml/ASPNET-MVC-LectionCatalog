@@ -12,13 +12,11 @@ namespace LectionCatalog.Controllers
 {
 	public class ProfileController : Controller
 	{
-		private static bool _editAccess;
 		private ILectionsService _service;
 		private readonly UserManager<ApplicationUser> _userManager;
 		private ApplicationUser user;
 
-		public ProfileController(ILectionsService service, UserManager<ApplicationUser> userManager,
-			AppDbContext context)
+		public ProfileController(ILectionsService service, UserManager<ApplicationUser> userManager)
         {
 			_service = service;
 			_userManager = userManager;	
@@ -29,15 +27,41 @@ namespace LectionCatalog.Controllers
 
 			var newUser = new EditAccountVM()
 			{
-				UserName = user.FullName,
-				EmailAddress = user.Email,
+				UserName = user.UserName,
+				Email = user.Email,
 			};
-
-			//_userManager.UpdateAsync(user);
-			
-			//EditAccess();
+			ViewBag.BottomSet = 0;
 
 			return View(newUser);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Index(EditAccountVM editAccountVM)
+        {
+			CheckUserName();
+			ViewBag.BottomSet = 0;
+
+			if (!ModelState.IsValid)
+			{
+				return View(editAccountVM);
+			}
+
+			var newUserData = new ApplicationUser()
+			{
+				UserName = editAccountVM.UserName,
+				Email = editAccountVM.Email,
+				FullName = editAccountVM.UserName,
+			};
+
+			var result = await _userManager.UpdateAsync(newUserData);
+
+            if (result.Succeeded)
+            {
+				return View(editAccountVM);
+			}
+
+			return View("Error");
+
 		}
 
 		[HttpGet]
@@ -74,7 +98,6 @@ namespace LectionCatalog.Controllers
 			}
 			return Json("It has already been added");
 		}
-
 		public async Task<JsonResult> addHistory(int LectionId)
 		{
 			CheckUserName();
@@ -108,12 +131,65 @@ namespace LectionCatalog.Controllers
 			}
 			return Json("");
 		}
+
+		public async Task<JsonResult> delWatchLater(int lectionId, int eq)
+		{
+			CheckUserName();
+
+			if (user.WatchLater.Contains(lectionId.ToString()))
+			{
+				var sub = lectionId.ToString() + " ";
+				user.WatchLater = user.WatchLater.Replace(sub, "");
+				var result = await _userManager.UpdateAsync(user);
+
+				if (result.Succeeded)
+				{
+					return Json(eq);
+				}
+			}
+			return Json("");
+		}
+
+		public async Task<JsonResult> delHistory(int lectionId, int eq)
+		{
+			CheckUserName();
+
+			if (user.History.Contains(lectionId.ToString()))
+			{
+				var sub = lectionId.ToString() + " ";
+				user.History = user.History.Replace(sub, "");
+				var result = await _userManager.UpdateAsync(user);
+
+				if (result.Succeeded)
+				{
+					return Json(eq);
+				}
+			}
+			return Json("");
+		}
+		public async Task<JsonResult> delAllRecords(int type)
+		{
+			CheckUserName();
+
+			switch (type)
+			{
+				case 0: user.Favorites = "";break;
+				case 1: user.WatchLater = "";break;
+				case 2: user.History = "";break;
+			}
+			
+			var result = await _userManager.UpdateAsync(user);
+
+			return Json("");
+		}
+
 		public async Task<IActionResult> Favorite()
         {
 			CheckUserName();
 
 			var lections = await _service.GetLectionsByList(user.Favorites);
 			ViewBag.Count = Count(lections);
+			ViewBag.BottomSet = 1;
 
 			return View(lections);
         }
@@ -123,6 +199,7 @@ namespace LectionCatalog.Controllers
 
 			var lections = await _service.GetLectionsByList(user.WatchLater);
 			ViewBag.Count = Count(lections);
+			ViewBag.BottomSet = 2;
 
 			return View(lections);
 		}
@@ -132,6 +209,7 @@ namespace LectionCatalog.Controllers
 
 			var lections = await _service.GetLectionsByList(user.History);
 			ViewBag.Count = Count(lections);
+			ViewBag.BottomSet = 3;
 
 			return View(lections);
 		}
