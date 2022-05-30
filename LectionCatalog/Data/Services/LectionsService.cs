@@ -102,6 +102,11 @@ namespace LectionCatalog.Data.Services
                  ToListAsync();
         }
 
+        public async Task<List<Lector>> GetLectorsAsync()
+        {
+            return await _context.Lectors.Include(l => l.Lectors_Lections).ToListAsync();
+        }
+
         public async Task<Lection> GetLectionByIdAsync(int id)
         {
            var lectionDetails = await _context.Lections.

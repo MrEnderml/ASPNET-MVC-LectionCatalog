@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
+using System.Security.Claims;
 using System.Collections.Generic;
 
 namespace LectionCatalog.Controllers
@@ -15,9 +16,12 @@ namespace LectionCatalog.Controllers
 		private ILectionsService _service;
 		private readonly UserManager<ApplicationUser> _userManager;
 		private ApplicationUser user;
+		private readonly IHttpContextAccessor _httpContextAccessor;
 
-		public ProfileController(ILectionsService service, UserManager<ApplicationUser> userManager)
+		public ProfileController(ILectionsService service, UserManager<ApplicationUser> userManager,
+			IHttpContextAccessor httpContextAccessor)
         {
+			_httpContextAccessor = httpContextAccessor;
 			_service = service;
 			_userManager = userManager;	
 		}
@@ -27,7 +31,7 @@ namespace LectionCatalog.Controllers
 
 			var newUser = new EditAccountVM()
 			{
-				UserName = user.UserName,
+				FullName = user.FullName,
 				Email = user.Email,
 			};
 			ViewBag.BottomSet = 0;
@@ -46,14 +50,10 @@ namespace LectionCatalog.Controllers
 				return View(editAccountVM);
 			}
 
-			var newUserData = new ApplicationUser()
-			{
-				UserName = editAccountVM.UserName,
-				Email = editAccountVM.Email,
-				FullName = editAccountVM.UserName,
-			};
+			user.FullName = editAccountVM.FullName;
+			user.Email = editAccountVM.Email;
 
-			var result = await _userManager.UpdateAsync(newUserData);
+			var result = await _userManager.UpdateAsync(user);
 
             if (result.Succeeded)
             {
@@ -131,7 +131,6 @@ namespace LectionCatalog.Controllers
 			}
 			return Json("");
 		}
-
 		public async Task<JsonResult> delWatchLater(int lectionId, int eq)
 		{
 			CheckUserName();
@@ -149,7 +148,6 @@ namespace LectionCatalog.Controllers
 			}
 			return Json("");
 		}
-
 		public async Task<JsonResult> delHistory(int lectionId, int eq)
 		{
 			CheckUserName();
@@ -182,7 +180,6 @@ namespace LectionCatalog.Controllers
 
 			return Json("");
 		}
-
 		public async Task<IActionResult> Favorite()
         {
 			CheckUserName();
@@ -213,12 +210,13 @@ namespace LectionCatalog.Controllers
 
 			return View(lections);
 		}
-		public void CheckUserName()
+		public async void CheckUserName()
 		{
 			if (user == null)
 			{
-				string userName = HttpContext.User.Identity.Name;
-				user = _userManager.FindByNameAsync(userName).Result;
+				//var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                string userName = HttpContext.User.Identity.Name;
+                user = _userManager.FindByNameAsync(userName).Result;
 			}
 
 			if (user.Favorites == null || user.Favorites == "0")

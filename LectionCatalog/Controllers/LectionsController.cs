@@ -97,12 +97,12 @@ namespace LectionCatalog.Controllers
             user.History = fwhReplace(user.History, id);
 
             var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded) {
+            if (result.Succeeded)
+            {
                 return Json("");
             }
             return Json("");
         }
-
         public async Task<IActionResult> Edit(int id)
         {
             var lectionDetails = await _service.GetLectionByIdAsync(id);
@@ -131,7 +131,6 @@ namespace LectionCatalog.Controllers
             ViewBag.Id = response.Id;
             return View(response);
         }
-
         [HttpPost]
         public async Task<IActionResult> Edit(int id, NewLectionVM lection)
         {
@@ -152,7 +151,6 @@ namespace LectionCatalog.Controllers
             await _service.UpdateLectionAsync(lection);
             return RedirectToAction(nameof(Index));
         }
-
         public async Task<IActionResult> Create()
         {
             var lectionDropdownData = await _service.GetLectionDropdownsValues();
@@ -161,7 +159,6 @@ namespace LectionCatalog.Controllers
 
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> Create(NewLectionVM lection)
         {
@@ -199,7 +196,12 @@ namespace LectionCatalog.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Lectors()
+        {
+            var lectors = await _service.GetLectorsAsync();
 
+            return View(lectors);
+        }
         public async Task<IActionResult> Search(string name)
         {
             var allLections = await _service.SearchAsync(name);

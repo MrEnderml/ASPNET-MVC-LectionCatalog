@@ -7,6 +7,7 @@ namespace LectionCatalog.Data.Services
     public interface ILectionsService
     {
         Task<List<Lection>> GetAllAsync();
+        Task<List<Lector>> GetLectorsAsync();
         Task<Lection> GetLectionByIdAsync(int id);
         Task<LectionDropdownsVM> GetLectionDropdownsValues();
         Task AddNewLectionAsync(NewLectionVM data);
