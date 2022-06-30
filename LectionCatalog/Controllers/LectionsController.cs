@@ -22,7 +22,7 @@ namespace LectionCatalog.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(FilterVM filterVM, int page = 1, bool filt = false, string sLector = "", string sYear = "", string sCategory = "", string sFilter = "")
+        public async Task<IActionResult> Index(FilterVM filterVM, int page = 1, bool filt = false, string searchString = "", string sLector = "", string sYear = "", string sCategory = "", string sFilter = "")
         {
             var allLections = await _service.GetAllAsync();
             var lectionsDropdownData = await _service.GetLectionDropdownsValues();
@@ -36,6 +36,11 @@ namespace LectionCatalog.Controllers
                 filterVM.SelectedFilter = sFilter == "Filter"? null: sFilter;
 			}
 
+            if(searchString != "")
+            {
+                allLections = (List<Lection>)await _service.SearchAsync(searchString);
+            }
+           
             if (!string.IsNullOrEmpty(filterVM.SelectedLector))
             {
                 allLections = (List<Models.Lection>)await _service.GetLectorsFilter(filterVM.SelectedLector);
@@ -202,9 +207,10 @@ namespace LectionCatalog.Controllers
 
             return View(lectors);
         }
-        public async Task<IActionResult> Search(string name)
+        public async Task<IActionResult> Search(string searchString)
         {
-            var allLections = await _service.SearchAsync(name);
+            var allLections = await _service.SearchAsync(searchString);
+            
             return PartialView(allLections);
         }
 

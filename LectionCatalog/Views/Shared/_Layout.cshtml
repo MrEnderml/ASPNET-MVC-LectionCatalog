@@ -20,20 +20,24 @@
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+					
 					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item dropdown">
-							<a class="nav-link text-dark dropdown-toggle" id="managementDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-weight: 700; font-size: 18px"><i class="bi bi-gear"></i> Management</a>
-						
-							<div class="dropdown-menu" aria-labelledby="managementDropdown">
-								<a class="dropdown-item" asp-controller="Lections" asp-action="Create"><i class="bi bi-plus-circle"></i> Add Lection</a>
-								<a class="dropdown-item" asp-controller="Lections" asp-action="CreateStuffLection"><i class="bi bi-plus-circle"></i> Add B-Lection</a>
-								<a class="dropdown-item" asp-controller="Lections" asp-action="Lectors"><i class="bi bi-people"></i> Lectors</a>
-							</div>
-						</li>
+						@if (User.IsInRole("Admin"))
+						{
+							<li class="nav-item dropdown">
+								<a class="nav-link text-dark dropdown-toggle" id="managementDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-weight: 700; font-size: 18px"><i class="bi bi-gear"></i> Management</a>
+
+								<div class="dropdown-menu" aria-labelledby="managementDropdown">
+									<a class="dropdown-item" asp-controller="Lections" asp-action="Create"><i class="bi bi-plus-circle"></i> Add Lection</a>
+									<a class="dropdown-item" asp-controller="Lections" asp-action="CreateStuffLection"><i class="bi bi-plus-circle"></i> Add B-Lection</a>
+									@*<a class="dropdown-item" asp-controller="Lections" asp-action="Lectors"><i class="bi bi-people"></i> Lectors</a>*@
+								</div>
+							</li>
+						}
 					</ul>
 
-					<form class="d-flex form-inline my-2 my-lg-0" asp-controller="Movies" asp-action="Filter" style="padding-right: 25px">
-						<input name="searchString" type="text" class="form-control" placeholder="Search for a movie..." />
+					<form class="d-flex form-inline my-2 my-lg-0" asp-controller="Lections" asp-action="Index" style="padding-right: 25px">
+						<input name="searchString" type="text" class="form-control" placeholder="Search for a lection..." />
 						<button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
 					</form>
 
